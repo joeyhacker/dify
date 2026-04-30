@@ -115,20 +115,7 @@ export const SkillSaveProvider = ({
       }),
     )
 
-    const rawContent = cached?.content
-    if (!rawContent)
-      return undefined
-
-    try {
-      const parsed = JSON.parse(rawContent) as { content?: unknown }
-      if (parsed && typeof parsed === 'object' && typeof parsed.content === 'string')
-        return parsed.content
-    }
-    catch {
-      // Fall back to raw content when it's not a JSON wrapper.
-    }
-
-    return rawContent
+    return cached?.content
   }, [appId, queryClient])
 
   const buildSnapshot = useCallback((
@@ -167,11 +154,7 @@ export const SkillSaveProvider = ({
     const queryKey = consoleQuery.appAsset.getFileContent.queryKey({
       input: { params: { appId, nodeId: fileId } },
     })
-    const serialized = JSON.stringify({
-      content: snapshot.content,
-      ...(snapshot.metadata ? { metadata: snapshot.metadata } : {}),
-    })
-    patchFileContentCache(queryClient, queryKey, serialized)
+    patchFileContentCache(queryClient, queryKey, snapshot.content)
   }, [appId, queryClient])
 
   const createCollaborativeSaveWaiter = useCallback((fileId: string): CollaborativeSaveWaiter => {
@@ -247,7 +230,6 @@ export const SkillSaveProvider = ({
         nodeId: fileId,
         payload: {
           content: snapshot.content,
-          ...(snapshot.metadata ? { metadata: snapshot.metadata } : {}),
         },
       })
 
@@ -372,11 +354,7 @@ export const SkillSaveProvider = ({
       const queryKey = consoleQuery.appAsset.getFileContent.queryKey({
         input: { params: { appId, nodeId: fileId } },
       })
-      const serialized = JSON.stringify({
-        content: payload.content,
-        ...(payload.metadata ? { metadata: payload.metadata } : {}),
-      })
-      patchFileContentCache(queryClient, queryKey, serialized)
+      patchFileContentCache(queryClient, queryKey, payload.content)
 
       const state = storeApi.getState()
       state.clearDraftContent(fileId)

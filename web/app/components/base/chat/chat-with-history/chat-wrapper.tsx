@@ -354,7 +354,7 @@ const ChatWrapper = () => {
                   size="xl"
                 />
               )
-            : undefined
+            : null
         }
       />
     </div>

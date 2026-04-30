@@ -10,6 +10,7 @@ import { Markdown } from '@/app/components/base/markdown'
 import { toast } from '@/app/components/base/ui/toast'
 import { cn } from '@/utils/classnames'
 import ActionButton from '../../action-button'
+import { Avatar } from '../../avatar'
 import Button from '../../button'
 import { CssTransform } from '../embedded-chatbot/theme/utils'
 import ContentSwitch from './content-switch'
@@ -158,10 +159,12 @@ const Question: FC<QuestionProps> = ({ item, questionIcon, theme, enableEdit = t
       </div>
       {!hideAvatar && (
         <div className="h-10 w-10 shrink-0">
-          {questionIcon || (
-            <div className="h-full w-full rounded-full border-[0.5px] border-black/5">
-              <div className="i-custom-public-avatar-user h-full w-full" />
-            </div>
+          {questionIcon ?? (
+            <Avatar
+              avatar={null}
+              name="user"
+              size="xl"
+            />
           )}
         </div>
       )}

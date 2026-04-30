@@ -26,14 +26,7 @@ export function appAssetTreeOptions(appId: string) {
 export function appAssetFileContentOptions(appId: string, nodeId: string) {
   return consoleQuery.appAsset.getFileContent.queryOptions({
     input: { params: { appId, nodeId } },
-    select: (data) => {
-      try {
-        return JSON.parse(data.content)
-      }
-      catch {
-        return { content: data.content }
-      }
-    },
+    select: data => data,
   })
 }
 
@@ -75,7 +68,7 @@ export const useUpdateAppAssetFileContent = () => {
     }) => {
       return consoleClient.appAsset.updateFileContent({
         params: { appId, nodeId },
-        body: { content: JSON.stringify(payload) },
+        body: payload,
       })
     },
   })
